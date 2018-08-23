@@ -1,4 +1,4 @@
-package main
+package transloc
 
 // Coordinates describes a coordinate. The first coordinate is the latitude and the second coordinate is the longitude
 type Coordinates [2]float64

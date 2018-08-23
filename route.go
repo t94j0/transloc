@@ -1,4 +1,4 @@
-package main
+package transloc
 
 // Route describes a route
 type Route struct {
