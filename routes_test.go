@@ -6,19 +6,15 @@ import (
 )
 
 func ExampleRoutes_refresh() {
-	routes := NewRoutes(639)
-	routes.Refresh()
+	routes, _ := NewRoutes(639)
 	highpointe := routes.Get(4008304)
 	fmt.Println(highpointe.Active)
 }
 
 func ExampleVehicle_vehicles() {
 	// Get route information
-	routes := NewRoutes(639)
-	routes.Refresh()
+	routes, _ := NewRoutes(639)
 	highpointe := routes.Get(4008304)
-
-	// Get vehicle information
 	highpointe.RefreshVehicles()
 
 	clemson := Coordinates{34.67631, -82.82393}
@@ -28,8 +24,8 @@ func ExampleVehicle_vehicles() {
 }
 
 func TestRoutes_refresh(t *testing.T) {
-	routes := NewRoutes(639)
-	if err := routes.Refresh(); err != nil {
+	routes, err := NewRoutes(639)
+	if err != nil {
 		t.Error(err)
 	}
 
@@ -41,8 +37,8 @@ func TestRoutes_refresh(t *testing.T) {
 }
 
 func TestRoutes_refreshvehicles(t *testing.T) {
-	routes := NewRoutes(639)
-	if err := routes.Refresh(); err != nil {
+	routes, err := NewRoutes(639)
+	if err != nil {
 		t.Error(err)
 	}
 

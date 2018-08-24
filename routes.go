@@ -17,21 +17,25 @@ type Routes struct {
 	Routes map[int]Route `json:"routes"`
 }
 
-// NewRoutes creates a new routes list
-func NewRoutes(agency int) *Routes {
-	return &Routes{
+// NewRoutes creates a new routes list and populates the routes
+func NewRoutes(agency int) (*Routes, error) {
+	newRoute := &Routes{
 		Agency: agency,
 		Routes: make(map[int]Route),
 	}
+
+	if err := newRoute.refresh(); err != nil {
+		return newRoute, err
+	}
+
+	return newRoute, nil
 }
 
 func (r *Routes) generateRouteURL() string {
 	return fmt.Sprintf(RoutesURL, r.Agency)
 }
 
-// Refresh populates the routes.
-// TODO: Add to NewRoutes
-func (r *Routes) Refresh() error {
+func (r *Routes) refresh() error {
 	resp, err := http.Get(r.generateRouteURL())
 	if err != nil {
 		return errors.Wrap(err, "error refreshing routes")
@@ -51,6 +55,11 @@ func (r *Routes) Refresh() error {
 	}
 
 	return nil
+}
+
+// Refresh populates the routes.
+func (r *Routes) Refresh() error {
+	return r.refresh()
 }
 
 // Get gets a target routeID

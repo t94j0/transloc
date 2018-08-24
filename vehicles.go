@@ -19,18 +19,22 @@ type Vehicles struct {
 }
 
 // NewVehicles describes a groups of vehicles
-func NewVehicles(agency int) *Vehicles {
-	return &Vehicles{
+func NewVehicles(agency int) (*Vehicles, error) {
+	vs := &Vehicles{
 		Agency: agency,
 	}
+	if err := vs.refresh(); err != nil {
+		return vs, err
+	}
+
+	return vs, nil
 }
 
 func (v *Vehicles) generateVehiclesURL() string {
 	return fmt.Sprintf(VehiclesURL, v.Agency)
 }
 
-// Refresh populates the list of vehicles
-func (v *Vehicles) Refresh() error {
+func (v *Vehicles) refresh() error {
 	resp, err := http.Get(v.generateVehiclesURL())
 	if err != nil {
 		return errors.Wrap(err, "error refreshing vehicles")
@@ -42,6 +46,11 @@ func (v *Vehicles) Refresh() error {
 	}
 
 	return nil
+}
+
+// Refresh populates the list of vehicles
+func (v *Vehicles) Refresh() error {
+	return v.refresh()
 }
 
 // GetRoute gets a list of vehicles with the specific route ID
